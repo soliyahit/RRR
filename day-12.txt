@@ -1,0 +1,183 @@
+I)
+Emloyee (EmpNo, Ename, Salary, Designation) 
+Dept (EmpNo, DeptNo) 
+
+1. Display all rows for salary greater than 5000. 
+Query:
+select * from employee1 where salary>5000;
+
+2. Display the deptno for the name ‘shyam’. 
+Query:
+select deptno from dept1 where empno in (select empno from employee1 where ename='shyam');
+
+3. Add a new column DeptName in Dept table.
+Query:
+alter table employee1 add deptname varchar(10);
+ 
+4. Change the designation of ename=’ram’ from ‘clerk’ to ‘senior clerk’.
+Query: 
+update employee1 set designation='senior clerk' where ename='ram';
+ 
+5. Find the total salary of all the rows. 
+Query:
+select sum(salary) from employee1;
+
+6. Display EmpNo, Ename, DeptNo, DeptName. 
+Query:
+select employee1.empno,employee1.ename,dept1.deptno from employee1,dept1 where employee1.empno in (select empno from dept1 where employee1.empno=dept1.empno);
+
+7. Drop the table Employee.
+Query: 
+drop table employee;
+
+
+------------------------------------------------END OF FIRST QUERY---------------------------------------------------
+
+II)
+Student (StuNo,sname,marks,college) 
+Course (StuNo,CourseId) 
+
+1. Display all rows for student greater than 80. 
+Query:
+select * from student where marks>80;
+
+2. Display the CouseId for the name ‘shyam’. 
+Query:
+select courseid from course where stuno in (select stuno from student where sname='shyam');
+
+3. Add a new column CollegeName in Course table.
+Query:
+alter table course add collegename varchar(15);
+ 
+4. Change the college of sname=’ram’ from ‘LJ’ to ‘new LJ’. 
+Query:
+update student set college='new LJ' where sname='ram';
+
+5. Find the total marks of all the rows. 
+Query:
+select sum(marks) from student;
+
+6. Display StuNo,sname,CoursId,CourseName.
+Query:
+select student1.stuno,student1.sname,course1.courseid from student1,course1 where student1.stuno in (select stuno from course1 where student1.stuno=course1.courseid);
+
+------------------------------------------------END OF SECOND QUERY--------------------------------------------------
+
+III)
+BOOK_CATALOG (book_code, title, ISBN_No, Publisher_Name, yr_of_release, total_copies ) 
+MEMBER (member_code, member_name, mem_ship_dt) 
+ISSUE (Issue_id, member_code, book_code, issue_date, issue_ret_dt) 
+
+1. Create the above tables with appropriate key constraints.
+Query:
+
+create table book_catalog(
+book_code varchar(6) primary key,
+title varchar(20) not null,
+isbn_no number(3) not null,
+publisher_name varchar(15) not null,
+yr_of_release date not null,
+total_copies number(6) not null);
+
+create table member(
+member_code varchar(6) primary key,
+member_name varchar(10) not null,
+mem_ship_dt date not null);
+
+create table issue(
+issue_id number(3) primary key,
+member_code varchar(6) references member,
+book_code varchar(6) references book_catalog,
+issue_date date not null,
+issue_ret_dt date not null);
+
+2. Publisher name should be entered in capital letters.
+Query:
+
+
+3. Display the book details which contain ‘Database’ somewhere in the book title .
+Query: select * from book_catalog where title like '%Database%';
+
+4. Display the member and book details for books issued between 1st January 2014 and 30th March 2015.
+Query:
+
+5. Display book details whose all copies are issued.
+Query:
+
+6. Display the book details of ‘Pearson’ publications.
+Query:
+select * from book_catalog where publisher_name='Pearson';
+
+7. Display those books having name Database and SQL.
+Query:
+select * from book_catalog group by book_code having title='Database' or title='SQL';
+
+8. Create a table LIBRARY_USER having the same structure of MEMBER table with no records.
+Query: 
+create table library_USER as select * from member;
+
+9. Drop table Library_USER from database.
+Query: 
+drop table Library_USER;
+
+------------------------------------------------END OF THIRD QUERY---------------------------------------------------
+
+IV)
+STUDENT (rollno, fname, lname, dob) 
+COURSE (courseno, coursename, max_marks, pass_marks)
+
+1. Create the above tables with appropriate key constraints. 
+Query:
+
+create table student(
+rollno number(4) primary key,
+fname varchar(10) not null,
+lname varchar(10) not null,
+dob date not null);
+
+create table course(
+courseno number(3) primary key,
+coursename varchar(16) not null,
+max_marks number(3) not null,
+pass_marks number(3) check (pass_marks>0));
+
+2. Marks cannot be less than 0. 
+Query:
+pass_marks number(3) check (pass_marks>0)
+
+3. Display the names of students who have last name like ‘Patel’, ‘Shah’ or ‘Desai’.
+Query:
+select fname from student where lname='patel' or lname='shah' or lname='desai';
+
+4. Display the names of students who have not failed in any subject .
+Query:
+
+
+5. Display the age of all the students.
+Query:
+select dob from student;
+
+------------------------------------------------END OF FOURTH QUERY--------------------------------------------------
+
+V)
+CUSTOMER (cno, cust_name)
+ITEM (item_no, item_name, item_price, stock) 
+CUST_ITEM (cust_no, item_no, qty_purchased, date_of_trans) 
+
+1. Create the above tables with appropriate key constraints.
+Query:
+
+2. Qty_Purchased cannot be 0. 
+Query:
+
+3. Retrieve the name of customers who have purchased the costliest item from the item list. 
+Query:
+
+4. Display the total item price. 
+Query:
+
+5. Alter table ITEM and add column item class, which can have values as A, B or C. 6. Display those customers who have purchased ‘chair’.
+Query:
+ 
+7. Display total number of items purchased by each customer. 6. Display the customer details whose name start with ‘n’.
+Query:

@@ -1,0 +1,78 @@
+4. Use following tables and write below given PL/SQL blocks.
+PRODUCTS (Prod_ID, Prod_Name, Supplier_ID, Cat_ID, Unit, Price)
+ORDER_DETAILS (OrderDetail_ID, Order_ID, Prod_Id, Quantity)
+
+
+create table product(prod_id varchar(5) primary key,prod_name varchar(20),supplier_id varchar(10),cat_id number(5),
+		      unit number(5), price number(5));
+
+insert into product values('P001','milk','S001',01,100,30);
+insert into product values('P002','suagar','S002',02,200,40);
+insert into product values('P003','beans','S003',03,300,50);
+insert into product values('P004','coco-powder','S004',04,400,60);
+insert into product values('P005','ice-cream','S005',05,500,70);
+
+create table order_detail(orderdetail_id varchar(4)primary key,ordear_id number(4),prod_id varchar(5)references product(prod_id),
+quantity number(10));
+
+insert into order_detail values('O001',001,'P001',100);
+insert into order_detail values('O002',002,'P002',150);
+insert into order_detail values('O003',003,'P003',300);
+insert into order_detail values('O004',004,'P004',500);
+insert into order_detail values('O005',005,'P005',600);
+
+1. Write a PLSQL block to display total number of products ordered in Order_ID = 3
+
+declare
+	qty order_detail.quantity%type;
+begin
+	select quantity into qty from order_detail where ordear_id = 003;
+	dbms_output.put_line(qty);
+end;
+
+2.Write a PLSQL block to update the price (actual price + 5) of product with Id = 2
+
+declare
+	pri product.price%type;
+begin 
+	update product set price = 45 where prod_id = 'P002';
+	select price into pri from product where prod_id = 'P002';
+	dbms_output.put_line(pri);
+end;
+
+3. Write a PLSQL block to delete the products of Cat_Id = 3
+
+begin
+	delete from product where cat_id = 03;
+end;
+
+4.  Write a PLSQL block to insert any product whose cat_id = 3
+declare
+
+begin
+	insert into product values(
+
+	
+
+5. Write a PLSQL block to display Supplier_Id and their total number of products they
+supply
+
+declare 
+	cursor csup is select * from product;
+	cursor corder(varpid order_detail.prod_id%type) is select * from order_detail where prod_id = varpid;
+begin
+	for varcsup in csup
+	loop
+		DBMS_OUTPUT.PUT_LINE('Supplier id: ' || varcsup.supplier_id);
+		DBMS_OUTPUT.PUT('product id: ' || varcsup.prod_id || '-->');
+			for varcorder in corder(varcsup.prod_id)
+			loop
+				dbms_output.put_line('Quantity - ' || varcorder.quantity);
+			end loop;
+	end loop;
+end;
+	
+	
+	
+
+

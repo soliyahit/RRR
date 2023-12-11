@@ -1,0 +1,328 @@
+
+create table student (rollno varchar(4) primary key,fname varchar(20),lname varchar(20),dob date);
+
+insert  into student values('R001','Manav','Patel','09-feb-2001');
+insert  into student values('R002','Sanket','Raval','26-apr-1944');
+insert  into student values('R003','Harsh','Patel','09-nov-2001');
+insert  into student values('R004','simmi','Virani','25-may-2005');
+insert  into student values('R005','Amisha','Raval','09-nov-2001');
+
+ROLL FNAME                LNAME                DOB
+---- -------------------- -------------------- ---------
+R001 Manav                Patel                09-FEB-01
+R002 Sanket               Raval                26-APR-44
+R003 Harsh                Patel                09-NOV-01
+R004 simmi                Virani               25-MAY-05
+R005 Amisha               Raval                09-NOV-01
+
+
+COURSE (rollno,courseno,fees, coursename, max_marks, pass_marks)
+create table course (roll_no varchar(4) references student(rollno),course_no varchar(5),fees number(4),course_name varchar(10), max_marks number(5), pass_marks number(5));
+
+insert into course values('R001','C001',2500,'c',150,75);
+insert into course values('R001','C002',2200,'html',200,150);
+insert into course values('R002','C003',1900,'c++',70,59);
+insert into course values('R002','C001',1200,'c',150,89);
+insert into course values('R003','C004',8000,'java',120,100);
+insert into course values('R003','C002',8000,'html',200,200);
+insert into course values('R004','C001',8000,'c',150,59);
+insert into course values('R004','C004',8000,'java',120,105);
+insert into course values('R004','C003',8000,'java',120,105);
+
+ROLL COURS       FEES COURSE_NAM  MAX_MARKS PASS_MARKS
+---- ----- ---------- ---------- ---------- ----------
+R001 C001        2500 c                 150         75
+R001 C002        2200 html              200        150
+R002 C003        1900 c++                70         59
+R002 C001        1200 c                 150         89
+R003 C004        8000 java              120        100
+R003 C002        8000 html              200        200
+R004 C001        8000 c                 150         59
+R004 C004        8000 java              120        105
+
+Exc(1) Find all students whose marks is higher than the average marks of the students in their
+ course.(using corelate sub query)
+
+	select * from student where student.rollno IN (
+	select roll_no from course,
+	(select course_no,avg(pass_marks) rt from course group by course_no) ep 
+        where course.pass_marks > ep.rt and course.course_no = ep.course_no);
+
+
+ROLL FNAME                LNAME                DOB
+---- -------------------- -------------------- ---------
+R001 Manav                Patel                09-FEB-01
+R002 Sanket               Raval                26-APR-44
+R003 Harsh                Patel                09-NOV-01
+R004 simmi                Virani               25-MAY-05
+
+Exc(2)  List the student detail whose marks is same as ‘simmi’.
+
+ select * from course where pass_marks in (select pass_marks from course where roll_no = 
+ (select rollno from student st where fname like'simmi') );
+
+
+ROLL COURS       FEES COURSE_NAM  MAX_MARKS PASS_MARKS
+---- ----- ---------- ---------- ---------- ----------
+R004 C001        8000 c                 150         59
+R002 C003        1900 c++                70         59
+R004 C004        8000 java              120        105
+
+Exc(3) Display the name of students who have enrolled for ‘html’ course. 
+
+
+select * from student where rollno IN (
+select roll_no from course where course_name like'html');
+
+ROLL FNAME                LNAME                DOB
+---- -------------------- -------------------- ---------
+R001 Manav                Patel                09-FEB-01
+R003 Harsh                Patel                09-NOV-01
+
+Exc(4) 4. Display details of students who have enrolled in courses
+
+ select * from student where rollno IN
+ (select distinct roll_no from course);
+
+
+ROLL FNAME                LNAME                DOB
+---- -------------------- -------------------- ---------
+R001 Manav                Patel                09-FEB-01
+R002 Sanket               Raval                26-APR-44
+R003 Harsh                Patel                09-NOV-01
+R004 simmi                Virani               25-MAY-05
+
+Exc(5) Update max_marks =80 where courseno is C004
+
+update course set max_marks = 80 where course_no = 'C004';
+
+Exc(6) Delete those rows where pass_marks is less than 40.
+
+delete from course where pass_marks < 40;
+
+Exc(7) Give the name of the course in which maximum number of students are enrolled
+
+select max(cnt) from 
+(select count(*) cnt,course_no from course group by course_no);
+
+  MAX(CNT)
+----------
+         3
+
+Exc(8) Display the first name and last name of student who have enrolled for ‘c’ course.
+ 
+select fname,lname from student where rollno IN(
+select roll_no from course where course_name like 'c');
+
+FNAME                LNAME
+-------------------- --------------------
+Manav                Patel
+Sanket               Raval
+simmi                Virani
+
+	
+Employee (emp_no, fname, lname, dob,address)
+create table emp1 (emp_no varchar(4) primary key,fname varchar(20),lname varchar(20),dob date,add1 varchar(20));
+
+insert into emp1 values('E001','Harry','Potter','2-feb-2001','Hogsward');
+insert into emp1 values('E002','Ron','Wasly','4-mar-2001','surat');
+insert into emp1 values('E003','Ben','parker','2-jun-2008','New York');
+insert into emp1 values('E004','Nobita','Nobi','3-feb-2008','Japan');
+insert into emp1 values('E005','Sizuka','Nobi','8-jul-2001','japan');
+insert into emp1 values('E006','Doremon','Nobi','9-dec-2001','japan');
+
+EMP_ FNAME                LNAME                DOB       ADD1
+---- -------------------- -------------------- --------- --------------------
+E001 Harry                Potter               02-FEB-01 Hogsward
+E002 Ron                  Wasly                04-MAR-01 surat
+E003 Ben                  parker               02-JUN-08 New York
+E004 Nobita               Nobi                 03-FEB-08 Japan
+E005 Sizuka               Nobi                 08-JUL-01 japan
+
+Company(comp_id,emp_no,company_name,salary,department,designation)
+
+create table company
+(comp_id varchar(5), emp_no varchar(4) references emp1(emp_no),company_name varchar(10),D_no varchar(5),
+salary number(5),department varchar(10),designation varchar(15),primary key(comp_Id,emp_no));
+
+insert into company values('C001','E001','intas',2000,'Management','Manager');
+insert into company values('C002','E002','infosys',90000,'HR','Director');
+insert into company values('C003','E003','Wipro',90000,'Management','Manager');
+insert into company values('C004','E004','Azilen',50000,'Finance','Accountant');
+insert into company values('C005','E005','Wipro',80000,'marketing','salesman');
+
+COMP_ EMP_ COMPANY_NA     SALARY DEPARTMENT DESIGNATION
+----- ---- ---------- ---------- ---------- ---------------
+C001  E001 intas            2000 Management Manager
+C002  E002 infosys         90000 HR         Director
+C003  E003 Wipro           90000 Management Manager
+C004  E004 Azilen          50000 Finance    Accountant
+C005  E005 Wipro           80000 marketing  salesman
+
+Customer(cust_no,fname,lname,address)
+
+create table customer(cust_n0 varchar(4) primary key,fname varchar(10),lname varchar(10),add1 varchar(15));
+
+insert into customer values('C001','ben','parker','new york');
+insert into customer values('C002','Manav','Kakani','Ahmedabad');
+insert into customer values('C003','Harsh','Patel','Surat');
+insert into customer values('C004','Sanket','Raval','Bihar');
+insert into customer values('C005','Vrajesh','Limbachiya','Godhra');
+
+CUST FNAME      LNAME      ADD1
+---- ---------- ---------- ---------------
+C001 ben        parker     new york
+C002 Manav      Kakani     Ahmedabad
+C003 Harsh      Patel      Surat
+C004 Sanket     Raval      BIhar
+C005 Vrajesh    Limbachiya Godhra
+
+Exc(1)  Find all employees whose salary is higher than 
+        the average salary of the employees in their departments.
+
+select emp_no,salary from company group by emp_no,salary having salary >
+(select avg(salary) from company);
+
+EMP_     SALARY
+---- ----------
+E005      80000
+E002      90000
+E003      90000
+
+Exc(2) List the employee detail whose salary is same as “Jay”
+
+
+select * from company where salary in (select salary from company where emp_no = 
+ (select Emp_no from emp1 where fname like'Ben') );
+
+COMP_ EMP_ COMPANY_NA     SALARY DEPARTMENT DESIGNATION
+----- ---- ---------- ---------- ---------- ---------------
+C003  E003 Wipro           90000 Management Manager
+C002  E002 infosys         90000 HR         Director
+
+Exc(3) Display the name of employees who work in ‘mrkt’ department. 
+
+select fname from emp1 where emp_no = 
+(select Emp_no from company where department like 'marketing'); 
+
+FNAME
+--------
+Sizuka
+
+Exc(4) Display details of employees not belong to any department. 
+
+ select * from emp1 where emp_no NOT IN
+ (select distinct emp_no from company);
+
+EMP_ FNAME                LNAME                DOB       ADD1
+---- -------------------- -------------------- --------- -----
+E006 Doremon              Nobi                 09-DEC-01 japan
+
+Exc(5) Find out all the customers having same name as the employees.
+      (Using multi column subquery).
+
+ select fname from emp1 where (select fname from customer) =
+ (select fname from emp1);
+
+
+Exc(6) Delete those rows where department=’HR’ ;
+
+delete from company where department like'HR';
+
+1 row deleted.
+
+Exc(7) Update salary*0.10 where emp_no=105.
+
+update company set salary=salary*0.10 where emp_no = 'E001';
+
+(III)
+PRODUCTS (Prod_ID, Prod_Name, Supplier_ID, Cat_ID, Unit, Price)
+
+Create table products(prod_id varchar(4) primary key,prod_name varchar(10),supplier_id varchar(10),
+  		      cat_id varchar(5), unit varchar(5), price number(5));
+
+insert into products values('P001','Butter','A1','C01','KG',100);
+insert into products values('P002','Milk','M1','C05','ML',25);
+insert into products values('P003','Paneer','A1','C02','KG',200);
+insert into products values('P004','lassi','CV2','C06','ML',50);
+insert into products values('P005','ButterMilk','CV1','C03','Ltr',70);
+insert into products values('P006','Cookie','CV1','C03','KG',70);
+
+
+PROD PROD_NAME  SUPPLIER_I CAT_I UNIT       PRICE
+---- ---------- ---------- ----- ----- ----------
+P001 Butter     A1         C01   KG           100
+P003 Paneer     A1         C02   KG           200
+P004 lassi      CV2        C06   ML            50
+P005 ButterMilk CV1        C03   Ltr           70
+P002 Milk       M1         C05   ML            25
+
+ORDER_DETAILS (OrderDetail_ID, Order_ID, Prod_Id, Quantity)
+ 
+create table order_details(od_id varchar(5) primary key, o_id varchar(5),
+                     prod_id varchar(10) references products(prod_id), qty number(5));
+
+insert into order_details values('OD01','O001','P001',50);
+insert into order_details values('OD02','O005','P002',200);
+insert into order_details values('OD03','O003','P003',150);
+insert into order_details values('OD04','O002','P004',100);
+insert into order_details values('OD05','O004','P005',300);
+insert into order_details values('OD06','O001','P002',50);
+
+OD_ID O_ID  PROD_ID           QTY
+----- ----- ---------- ----------
+OD01  O001  P001               50
+OD02  O005  P002              200
+OD03  O003  P003              150
+OD04  O002  P004              100
+OD05  O004  P005              300
+
+Exc(1)  Lists the ProductName if ANY records in the Order_Details table has Quantity equal to 50
+
+select prod_name from products where prod_id IN(
+select prod_id from order_details where qty = 50);
+
+
+PROD_NAME
+----------
+Butter
+Milk
+
+Exc(2) lists the ProductName if ALL the records in the OrderDetails table has Quantity more than 150
+
+ select prod_name from products where prod_id IN(
+ select prod_id from order_details where qty > 150);
+
+PROD_NAME
+----------
+Milk
+ButterMilk
+
+Exc(3) Display Products which are not ordered
+
+select prod_name from products where prod_id NOT IN(
+select distinct prod_id from order_details);
+
+PROD_NAME
+----------
+Cookie
+
+Exc(4) List the products which is ordered for more than 200 Quantity
+
+ select prod_name from products where prod_id IN(
+ select prod_id from order_details where qty > 200);
+
+PROD_NAME
+----------
+ButterMilk
+
+Exc(5) List the products whose Unit is Kg or Lt (Use IN operator)
+
+ select prod_name,unit from products where unit IN('KG','Ltr');
+
+PROD_NAME  UNIT
+---------- -----
+Butter     KG
+Paneer     KG
+ButterMilk Ltr
+Cookie     KG

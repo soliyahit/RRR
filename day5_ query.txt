@@ -1,0 +1,284 @@
+exc(1) Display all the clients whose age is more than 25 years but less than 50 yesrs
+
+select  CLIENT_NAME, to_char(sysdate, 'yyyy') - to_char(birth_date , 'yyyy')
+ from CLIENT_MASTER
+ where to_char(sysdate, 'yyyy') - to_char(birth_date , 'yyyy') > 25 and to_char(sysdate, 'yyyy') - to_char(birth_date , 'yyyy') < 50
+
+
+CLIENT_NAME               TO_CHAR(SYSDATE,'YYYY')-TO_CHAR(BIRTH_DATE,'YYYY')
+------------------------- --------------------------------------------------
+Kajal Oza                                                                 35
+Vraj Shah                                                                 36
+Dhyan Dave                                                                34
+Mira Vaid                                                                 46
+
+
+Exc(2) Display all the Salesman from Salesman_Master table whose “Sale” is more than his
+“Target” and “Target” is more than 100
+
+
+ select  target,sales,name from salesman_master where  target > 100 and  sales >target;
+
+ NAME                          TARGET      SALES
+------------------------- ---------- ----------
+Sanket                           200        300
+
+
+Exc(3)  Find the Salesman who are neither from Baroda nor from Surat
+
+select name from salman_master where city Not in('baroda','surat');
+
+SQL> select name from salman_master where city Not in('baroda','surat');
+
+NAME
+--------------------
+sanket
+harsh
+sachin
+ajit
+rahil
+krunal
+
+Exc(4) Display total number of clients using Client_Master Table.
+
+select count(C_No) from Client_Master;
+
+
+Exc(5) Display the highest salary s salesman is getting.
+select max(Salary) from salesman_Master;
+
+
+MAX(SALARY)
+-----------
+       8000
+
+Exc(6) Display all item names in upper case letters only.
+
+SELECT UPPER(description) AS Uppercasedescription
+FROM product_master;
+
+UPPERCASEDESCRIPTION
+--------------------
+T-SHIRT
+JEANS
+SKIRT
+SAREE
+
+Exc(7) Display current date and time
+
+Exc(8) Display average target given to the salesman
+
+   select avg(target) target from salman_master; 
+
+AVG(TARGET)
+-----------
+      139.7
+
+Exc(9) Display the Birth Date (DOB in Student_Master Table) in a new format. (Eg. February
+12, 1998)
+
+ select to_char(birth_date,'Month dd, yyyy') AS BIRTH_DATE from client_master;
+
+BIRTH_DATE
+---------------------------------------------
+July      14, 1987
+November  20, 1986
+June      17, 1988
+January   05, 1976
+February  28, 1971
+
+Exc(10) Display Date of Joining (DOJ, Faculty_Master) of all faculties in DD/MM/YY format;
+
+select to_char(birth_date,'dd/mm/yy') AS JOINING_DATE from client_master;
+
+
+JOINING_
+--------
+14/07/87
+20/11/86
+17/06/88
+05/01/76
+28/02/71
+
+Exc(11) Display Only Birth Date and Month of all the students from Student_Master Table
+
+select to_char(birth_date,'dd-Month') AS BIRTH_DATE from client_master;
+
+BIRTH_DATE
+---------------------------------------
+14-July
+20-November
+17-June
+05-January
+28-February
+
+
+Create table Emp;
+
+create table emp (
+e_no varchar(4) primary key, 
+name varchar(10), 
+pincode number(6), 
+dob date, 
+add1 varchar(20),
+sal number(6),
+occuption varchar(15));
+
+insert into emp values('E100','Kapil',380051,'24-nov-2001','Bombay',100000,'job');
+insert into emp values('E101','Manish',382350,'20-jul-2005','Pune',50000,'CEO');
+insert into emp values('E102','Ramesh',382360,'26-feb-1999','Goa',250000,'Engineer');
+insert into emp values('E103','Rohan',382370,'20-jun-1995','Delhi',35000,'Clerk');
+insert into emp values('E104','Raj',382380,'20-jan-2005','Ahmedabad',30000,'Doctor');
+
+E_NO NAME          PINCODE DOB       ADD1                        SAL OCCUPTION
+---- ---------- ---------- --------- -------------------- ---------- ---------------
+E100 Kapil          380051 24-NOV-01 Bombay                   100000 job
+E101 Manish         382350 20-JUL-05 Pune                      50000 CEO
+E102 Ramesh         382360 26-FEB-99 Goa                      250000 Engineer
+E103 Rohan          382370 20-JUN-95 Delhi                     35000 Clerk
+E104 Raj            382380 20-JAN-05 Ahmedabad                 30000 Doctor
+
+exc(1) List the names of all employee having ‘a’ as the second letter in their names
+
+ select name from emp where name like'_a%';
+
+NAME
+----------
+Kapil
+Manish
+Ramesh
+Raj
+
+Exc(2) List the employee whose occupation fist letter is ‘M’
+
+ select name,occuption from emp where occuption like'M%';
+
+NAME       OCCUPTION
+---------- ---------------
+Kapil      Manager
+
+Exc(3) List the employees who have the second character as a or o
+
+select name from emp where name like'_a%' or name like'_o%';
+
+NAME
+----------
+Kapil
+Manish
+Ramesh
+Rohan
+Raj
+
+Exc(4) List the employee details of the named Rohan, Ramesh and Raj;
+
+select * from emp where name IN('Rohan','Ramesh','Raj');
+
+E_NO NAME          PINCODE DOB       ADD1                        SAL OCCUPTION
+---- ---------- ---------- --------- -------------------- ---------- ---------------
+E102 Ramesh         382360 26-FEB-99 Goa                      250000 Engineer
+E103 Rohan          382370 20-JUN-95 Delhi                     35000 Clerk
+E104 Raj            382380 20-JAN-05 Ahmedabad                 30000 Doctor
+
+Exc(5) List all employee who stay in ‘Banglore’ or ‘Pune’.
+
+select name,add1 from emp where add1 like'Banglore' or add1 like'Pune';
+
+NAME       ADD1
+---------- --------------------
+Manish     Pune
+
+EXC(6) List the details of employee E102 and E104
+
+select * from emp where e_no IN('E102','E104');
+
+E_NO NAME          PINCODE DOB       ADD1                        SAL OCCUPTION
+---- ---------- ---------- --------- -------------------- ---------- ---------------
+E102 Ramesh         382360 26-FEB-99 Goa                       25000 Engineer
+E104 Raj            382380 20-JAN-05 Ahmedabad                 30000 Doctor
+
+Exc(7) List the details of employee whose salary is greater than 5000 and less than 20000.
+
+ select * from emp where sal > 5000 and sal < 20000;
+
+E_NO NAME          PINCODE DOB       ADD1                        SAL OCCUPTION
+---- ---------- ---------- --------- -------------------- ---------- ---------------
+E100 Kapil          380051 24-NOV-01 Bombay                    10000 Manager
+
+Exc(8) List the name of employees who are not in the state ‘Bombay’.
+
+select name,add1 from emp where add1 NOT IN'Bombay';
+
+NAME       ADD1
+---------- --------------------
+Manish     Pune
+Ramesh     Goa
+Rohan      Delhi
+Raj        Ahmedabad
+
+Exc(9) List employee whose salary is less than 10000 and calculate a new incremented salary
+ by 15% as Salary * .15
+
+ select sal + (sal*0.15) as New_Salary from emp where sal < 10000
+
+NEW_SALARY
+----------
+      5750
+
+Exc(10) Count the total number of employees
+
+select count(e_no) from emp; 
+
+COUNT(E_NO)
+-----------
+          5
+Exc(11) Calculate the average salary of all the employees.
+
+select avg(Sal) as Average_Salary from emp;
+
+AVERAGE_SALARY
+--------------
+         21000
+
+Exc(12) Determine the maximum and minimum salary. Rename the output as max_salary and
+ min_salary respectively
+
+select max(sal) As Max_salary, min(sal) AS min_salary from emp;
+
+MAX_SALARY MIN_SALARY
+---------- ----------
+     35000       5000
+
+Exc(13) Count the number of employees having salary less than or equal to 15000.
+
+ select count(e_no) from emp where sal <= 15000;
+
+COUNT(E_NO)
+-----------
+          2
+
+Exc(14) List the details of Employee month wise in DD/MM/YY format.
+
+select to_char(DOB,'dd/mm/yy') AS birth_date from emp;
+
+BIRTH_DA
+--------
+24/11/01
+20/07/05
+26/02/99
+20/06/95
+20/01/05
+
+Exc(15) List the DOB in the format ‘DD-Month-YY’ e.g 12-February-91.ss
+
+select to_char(DOB,'dd-MOnth-yy') AS birth_date from emp
+
+BIRTH_DATE
+------------------------------------------
+24-NOVEMBER -01
+20-JULY     -05
+26-FEBRUARY -99
+20-JUNE     -95
+20-JANUARY  -05
+
+
+

@@ -1,0 +1,112 @@
+1.Remove the product details column from Product_Master Table:
+
+SQL> ALTER TABLE PRODUCT_MASTER DROP COLUMN DESCRIPTION;
+Table altered.
+_________________________________________________________________________________________________________________________________
+_________________________________________________________________________________________________________________________________
+ 
+2.Remove all Sales_Orders whose QtyOrdered = 1 in “Sales_Order_Detail” table:
+
+SQL> DELETE FROM SALES_ORDER_DETAISS WHERE QTY_ORDERED=1;
+1 row deleted.
+_________________________________________________________________________________________________________________________________
+_________________________________________________________________________________________________________________________________
+
+3.Modify the OrderStatus to “Fulfilled” where the OrderStatus is “In Process” in Sales_Order Table.:
+
+SQL> UPDATE SALES_ORDER SET ORDER_STATUS ='FULFILED' WHERE ORDER_NO='O5';
+1 row updated.
+_________________________________________________________________________________________________________________________________
+_________________________________________________________________________________________________________________________________
+
+4.Add column City and State in Client_Master table:
+
+SQL>  ALTER TABLE CLIENT_MASTER ADD (CITY VARCHAR(20));
+Table altered.
+
+SQL>  ALTER TABLE CLIENT_MASTER ADD (STATE VARCHAR(20));
+Table altered.
+_________________________________________________________________________________________________________________________________
+_________________________________________________________________________________________________________________________________
+5.Add a Client record for Client Name Ashwini Joshi, city = Banglore:
+
+ SQL> INSERT INTO CLIENT_MASTER VALUES
+     ('C006','ASHWINI JOSHI',387903,'17-June-1988','Doctor','BANGLORE',NULL);
+ 1 row created.
+_________________________________________________________________________________________________________________________________
+_________________________________________________________________________________________________________________________________
+
+6.Change the city of the client “Ashwini Joshi” from “Bangalore” to “Chennai”:
+
+SQL> UPDATE CLIENT_MASTER SET CITY='CHENNAI' WHERE CITY='BANGLORE';
+1 row updated.
+_________________________________________________________________________________________________________________________________
+_________________________________________________________________________________________________________________________________
+
+7.Change the Cost Price (Cost_P) of of a Skirt:
+
+SQL> UPDATE PRODUCT_MASTER SET COST_P=400 WHERE DESCRIPTION='SKIRT';
+1 row updated.
+_________________________________________________________________________________________________________________________________
+_________________________________________________________________________________________________________________________________
+8.Increase the sell price of saree by Rs. 20:
+
+SQL> UPDATE PRODUCT_MASTER SET SELL_P=SELL_P+20 WHERE P_NO='P004';
+1 row updated.
+_________________________________________________________________________________________________________________________________
+_________________________________________________________________________________________________________________________________
+
+9.Delete all Salesman from Salesman_Master table whose salary is more than 3500:
+
+SQL> DELETE FROM SALESMANN_MASTERR WHERE SALARY >=3500;
+5 rows deleted.
+_________________________________________________________________________________________________________________________________
+_________________________________________________________________________________________________________________________________
+10.Delete all Products from Product_master where Quantity on Hand (Qty_Hand) is less than 50:
+
+SQL> DELETE FROM PRODUCT_MASTER WHERE QTY_HAND<50;
+0 rows deleted.
+
+_________________________________________________________________________________________________________________________________
+_________________________________________________________________________________________________________________________________
+11.Add a column Mobile_No of type Number, in the Client_Master Table:
+
+SQL> ALTER TABLE CLIENT_MASTER ADD (MOBILE_NO NUMBER(10));
+Table altered.
+
+DISPLAY TABLE:
+SQL>  DESC CLIENT_MASTER
+ Name                                                           
+ -------------------------------------------------------------
+ C_NO                                                           
+ CLIENT_NAME                                                    
+ PINCODE                                                        
+ BIRTH_DATE                                                     
+ OCCUPATION                                                     
+ CITY                                                           
+ STATE                                                          
+ MOBILE_NO   
+_________________________________________________________________________________________________________________________________
+_________________________________________________________________________________________________________________________________                                                   
+
+12.Change the name of Salesman_Master table to “SMan_Mst”:
+
+SQL> RENAME SALESMANN_MASTERR TO SMan_Mst;
+Table renamed.
+
+DISPLAY TABLE:
+SQL> DESC SMan_Mst;
+ Name                                                   
+ -----------------------------------------------------
+ S_NO                                                   
+ NAME                                                   
+ ADD1                                                   
+ ADD2                                                   
+ CITY                                                   
+ PINCODE                                                
+ STATE                                                  
+ SALARY                                                 
+ TARGET                                                 
+ SALES                                                  
+
+        

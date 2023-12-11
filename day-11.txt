@@ -1,0 +1,186 @@
+create table emp (emp_no varchar(10) primary key,e_name varchar(10),city varchar(10));
+
+insert into emp values('E001','sanket','ahmedabad');
+insert into emp values('E002','manav','baroda');
+insert into emp values('E003','harsh','surat');
+insert into emp values('E004','harry','rajkot');
+insert into emp values('E005','coffee','mumbai');
+
+
+create table dept (dept_no varchar(10) primary key,emp_no varchar(10) references emp(emp_no),dept_name varchar(10));
+
+insert into dept values('D001','E001','marketing');
+insert into dept values('D002','E002','HR');
+insert into dept values('D003','E003','loan');
+insert into dept values('D004','E004','HOD');
+insert into dept values('D005','E005','finance');
+
+
+1. Create a view called Emp_View from Employee table.
+
+create view emp_view as select * from emp;
+
+SQL> select * from emp_view;
+
+EMP_NO     E_NAME     CITY
+---------- ---------- ----------
+E001       sanket     ahmedabad
+E002       manav      baroda
+E003       harsh      surat
+E004       harry      rajkot
+E005       coffee     mumbai
+
+2. Renaming the columns of Emp view.
+
+create view emp_view2 AS select emp_no"empno",E_name"Ename",city"Add1" from emp;
+
+empno      Ename      Add1
+---------- ---------- ----------
+E001       sanket     ahmedabad
+E002       manav      baroda
+E003       harsh      surat
+E004       harry      rajkot
+E005       coffee     mumbai
+
+3. Select Employee Name where dept_name is ‘Marketing’ or ‘Loan’.
+
+select e_name,dept_name from emp join dept on
+emp.emp_no = dept.emp_no where dept_name like'marketing'
+union
+select e_name,dept_name from emp join dept on
+emp.emp_no = dept.emp_no where dept_name like'loan';
+
+
+E_NAME     DEPT_NAME
+---------- ----------
+harsh      loan
+sanket     marketing
+
+4. Update Name=’Ron’ where name is ‘harry’.
+
+update emp set e_name = 'Ron' where e_name = 'harry';
+
+EMP_NO     E_NAME     CITY
+---------- ---------- ----------
+E001       sanket     ahmedabad
+E002       manav      baroda
+E003       harsh      surat
+E004       Ron        rajkot
+E005       coffee     mumbai
+
+5. Delete a record where name is ‘coffee’.
+
+
+DELETE FROM emp WHERE e_name like 'coffee';
+
+EMP_NO     E_NAME     CITY
+---------- ---------- ----------
+E001       sanket     ahmedabad
+E002       manav      baroda
+E003       harsh      surat
+E004       Ron        rajkot
+
+6. Remove a view Emp from database.
+
+ drop view emp_view1;
+
+View dropped.
+
+
+
+Branch (bno, bname) 
+Address (addno, bno,type, Addr1, Addr2, City, State, Pincode)
+
+
+create table branch(bno varchar(10) primary key,bname varchar(10));
+
+insert into branch values('B001','vejalpur');
+insert into branch values('B002','nikol');
+insert into branch values('B003','naroda');
+insert into branch values('B004','bopal');
+insert into branch values('B005','sarkhej');
+
+
+create table address(addno varchar(20) primary key,bno varchar(10) references branch(bno),type varchar(10),addr1 varchar(10),addr2 varchar(10),city varchar(10),state varchar(10),pincode number(6));
+
+
+insert into address values('A001','B001','H','xyz','pqr','ahmedabad','gujarat',380021);
+insert into address values('A002','B002','B','xyz','pqr','surat','gujarat',380022);
+insert into address values('A003','B003','H','xyz','pqr','rajkot','gujarat',380023);
+insert into address values('A004','B004','B','xyz','pqr','mumbai','gujarat',380023);
+insert into address values('A005','B005','H','xyz','pqr','baroda','gujarat',380024);
+
+
+SQL> select * from address;
+
+
+ADDNO                BNO        TYPE       ADDR1      ADDR2      CITY       STATE         PINCODE
+-------------------- ---------- ---------- ---------- ---------- ---------- ---------- ----------
+A001                     B001       H                     xyz           pqr          ahmedabad  gujarat        380021
+A002                     B002       B                     xyz           pqr          surat      gujarat              380022
+A003                     B003       H                     xyz           pqr          rajkot     gujarat             380023
+A004                     B004       B                      xyz          pqr          mumbai     gujarat         380023
+A005                     B005       H                     xyz           pqr          baroda     gujarat           380024
+
+2. type field will have value ‘H’ or ‘B’ (H-Head, B-Branch);
+
+select bname,type from branch join address on
+branch.bno = address.bno where type like'H'
+union
+select bname,type from branch join address on
+branch.bno = address.bno where type like'B';
+
+BNAME      TYPE
+---------- ----------
+bopal      B
+naroda     H
+nikol      B
+sarkhej    H
+vejalpur   H
+
+3..Create a view Branch_Master from Brach and Address Table.
+
+create view branch_master2 AS select branch.bno,bname,addno,type, Addr1, Addr2, City, State, Pincode from branch join address on branch.bno             = address.bno;
+
+BNO        BNAME      ADDNO                TYPE       ADDR1      ADDR2      CITY       STATE         PINCODE
+---------- ---------- -------------------- ---------- ---------- ---------- ---------- ---------- ----------
+B001       vejalpur   A001                 H          xyz        pqr        ahmedabad  gujarat        380021
+B002       nikol      A002                 B          xyz        pqr        surat      gujarat        380022
+B003       naroda     A003                 H          xyz        pqr        rajkot     gujarat        380023
+B004       bopal      A004                 B          xyz        pqr        mumbai     gujarat        380023
+B005       sarkhej    A005                 H          xyz        pqr        baroda     gujarat        380024
+
+4. .Update Pincode=400079 where bno=102. 
+ update branch_master2 set pincode = 400079 where bno = 'B002';
+
+BNO        BNAME      ADDNO                TYPE       ADDR1      ADDR2      CITY       STATE         PINCODE
+---------- ---------- -------------------- ---------- ---------- ---------- ---------- ---------- ----------
+B001       vejalpur   A001                 H          xyz        pqr        ahmedabad  gujarat        380021
+B002       nikol      A002                 B          xyz        pqr        surat      gujarat        400079
+B003       naroda     A003                 H          xyz        pqr        rajkot     gujarat        380023
+B004       bopal      A004                 B          xyz        pqr        mumbai     gujarat        380023
+B005       sarkhej    A005                 H          xyz        pqr        baroda     gujarat        380024
+
+3.Delete records where bno=102;
+
+delete branch_master2 where bno = 'B005';
+
+BNO        BNAME      ADDNO                TYPE       ADDR1      ADDR2      CITY       STATE         PINCODE
+---------- ---------- -------------------- ---------- ---------- ---------- ---------- ---------- ----------
+B001       vejalpur   A001                 H          xyz        pqr        ahmedabad  gujarat        380021
+B002       nikol      A002                 B          xyz        pqr        surat      gujarat        400079
+B003       naroda     A003                 H          xyz        pqr        rajkot     gujarat        380023
+B004       bopal      A004                 B          xyz        pqr        mumbai     gujarat        380023
+
+5. Remove a view Branch_Master from database.
+
+drop view branch_master2;
+
+View dropped.
+
+
+
+ 
+
+
+

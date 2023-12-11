@@ -1,0 +1,156 @@
+Worker (Id, Name, Wages_Per_Hr)
+Job (Job_Id, Job_Type)
+Assigned (W_Id, J_Id, Start_Date, Status, Total_Hrs)
+
+create table Worker (w_id varchar(4) primary key,name varchar(10),wph  number(10));
+
+insert into worker values('W001','sanket',500);
+insert into worker values('W002','harsh',300);
+insert into worker values('W003','manav',200);
+insert into worker values('W004','harry',500);
+insert into worker values('W005','coffee',800);
+insert into worker values('W006','Damar',800);
+
+create table job1(job_id varchar(4) primary key,job_type varchar(10));
+
+insert into job1 values('J001','manager');
+insert into job1 values('J002','clerk');
+
+
+
+create table assigned(w_id varchar(4) references worker(w_id),j_id varchar(4) references job1(job_id),start_date date,status varchar(20),total_hrs number(10));
+
+insert into assigned values('W001','J001','11-feb-2020','Done',10);
+insert into assigned values('W002','J001','12-feb-2020','Done',10);
+insert into assigned values('W003','J001','13-feb-2020','Pending',12);
+insert into assigned values('W004','J002','14-feb-2020','in progress',7);
+insert into assigned values('W005','J002','15-feb-2020','Pending',6);
+insert into assigned values('W006','J002','15-feb-2020','Done',6);
+
+Exc(1) . Display all the workers’ Id assigned for Job 1 and 2 both (J_Id =1 and J_Id=2)
+
+select * from worker join assigned on
+worker.w_id = assigned.w_id where j_id like'J001'
+Union
+select * from worker join assigned on
+worker.w_id = assigned.w_id where j_id like'J002';
+
+QCSJ NAME              WPH QCSJ J_ID START_DAT STATUS                TOTAL_HRS
+---- ---------- ---------- ---- ---- --------- -------------------- ----------
+W001 sanket            500 W001 J001 11-FEB-20 Done                         10
+W002 harsh             300 W002 J001 12-FEB-20 Done                         10
+W003 manav             200 W003 J001 13-FEB-20 Pending                      12
+W004 harry             500 W004 J002 14-FEB-20 in progress                   7
+W005 coffee            800 W005 J002 15-FEB-20 Pending                       6
+
+Exc(2) List the workers who are working for J_Id =1 and not for J_Id = 2
+
+select * from worker join assigned on
+worker.w_id = assigned.w_id where j_id NOT IN(select j_id from assigned where j_id like'J002');
+
+QCSJ NAME              WPH QCSJ J_ID START_DAT STATUS                TOTAL_HRS
+---- ---------- ---------- ---- ---- --------- -------------------- ----------
+W001 sanket            500 W001 J001 11-FEB-20 Done                         10
+W002 harsh             300 W002 J001 12-FEB-20 Done                         10
+W003 manav             200 W003 J001 13-FEB-20 Pending                      12
+
+Exc(3) Display the workers Id who are working for more than 6 hours and status is pending. And
+Union them all with the worker’s Id who are working for less than 6 hours and status is
+completed
+
+select * from worker join assigned on
+worker.w_id = assigned.w_id where total_hrs > 6 and status like'Pending'
+union
+select * from worker join assigned on
+worker.w_id = assigned.w_id where total_hrs <= 6 and status like'Done'
+
+QCSJ NAME              WPH QCSJ J_ID START_DAT STATUS                TOTAL_HRS
+---- ---------- ---------- ---- ---- --------- -------------------- ----------
+W003 manav             200 W003 J001 13-FEB-20 Pending                      12
+W006 Damar             800 W006 J002 15-FEB-20 Done                          6
+
+
+(II) Use following tables to solve below given queries.
+FYRankers (Enrol_No, Name, SPI)
+SYRankers (Enrol_No, Name, SPI) 
+
+create table FY(Enrol_no varchar(10) primary key, name varchar(10), spi number(5,2));
+
+insert into FY values('FE001','Manav',6.5);
+insert into FY values('FE002','Sanket',5.5);
+insert into FY values('FE003','Harsh',4.5);
+insert into FY values('FE004','Ron',7.9);
+insert into FY values('FE005','salim',8);
+
+
+create table SY(Enrol_no varchar(10) primary key, name varchar(10), spi number(5,2));
+
+insert into SY values('SE001','Coffee',6.5);
+insert into SY values('SE002','Harry',5.5);
+insert into SY values('SE003','Damar',4.5);
+insert into SY values('SE004','Ron',7.9);
+insert into SY values('SE005','salim',3);
+
+Exc(1) 1. Display the name of the student who is ranker in ‘FY’ or ‘SY’
+
+select * from FY where spi = (select max(spi) from FY)
+union
+select * from SY where spi = (select max(spi) from SY);
+
+ENROL_NO   NAME              SPI
+---------- ---------- ----------
+FE004      Ron               7.9
+SE004      Ron               7.9
+
+
+Exc(2) Display the name of the student who is ranker in ‘FY’ or ‘SY’ including duplicate data
+
+
+
+Exc(3) Display the name of the students who is ranker in ‘FY’ or ‘SY’ and having SPI more than 7
+select * from FY where spi > 7
+union
+select * from SY where spi > 7;
+
+ENROL_NO   NAME              SPI
+---------- ---------- ----------
+FE004      Ron               7.9
+SE004      Ron               7.9
+
+Exc(4)  Display the name of the student who is ranker in both FY and SY
+
+select * from FY where spi = (select max(spi) from FY)
+union
+select * from SY where spi = (select max(spi) from SY);
+
+ENROL_NO   NAME              SPI
+---------- ---------- ----------
+FE004      Ron               7.9
+SE004      Ron               7.9
+
+Exc(5) Display the name of the student who is ranker in FY but not in SY
+
+select * from FY where spi = (select max(spi) from FY)
+minus
+select * from SY where spi = (select max(spi) from SY);
+
+ENROL_NO   NAME              SPI
+---------- ---------- ----------
+FE005      salim               8
+
+Exc(6)  Display the name of the student who is ranker in SY but not in FY
+
+select * from SY where spi = (select max(spi) from SY)
+minus
+select * from FY where spi = (select max(spi) from FY);
+
+ENROL_NO   NAME              SPI
+---------- ---------- ----------
+SE004      Ron               7.9
+
+
+
+
+
+
+

@@ -1,0 +1,43 @@
+1. Write a PLSQL block to print all the prime numbers between 1 to 50.
+
+declare
+	i number;
+	counter number;
+	k number;
+	n number;
+begin
+	for n in 1 .. 100
+	loop
+		counter := 0;
+		k := n/2;
+		for i in 2..k
+		loop
+			if(mod(n, i) = 0) then
+				counter := 1;
+			end if;
+		end loop;
+		if(counter = 0) then
+			dbms_output.put_line(n || ' is a prime no');
+		end if;
+	end loop;
+end;
+
+2.Display all the integer numbers between 4 to 40 which are divisible by 3 using “Exit 
+ When” statement.
+
+declare
+	i number;
+	j number;
+begin
+	i := 4;
+	loop
+		i := i + 1;
+		if (i/3) then
+			dbms_output.put_line(i);
+		end if;
+	exit when i <= 40; 
+	end loop;
+end;
+
+
+		

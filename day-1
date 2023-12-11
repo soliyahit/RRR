@@ -1,0 +1,60 @@
+
+1. Display the structure of an EMP table.
+desc emp;
+
+2. Display the structure of an DEPT table.
+desc dept;
+
+3. Display all the records of EMP table.
+select * from emp;
+
+4. Display all the records of DEPT table.
+select * from dept;
+
+5. Display only name of all employees.
+select ename from emp;
+
+6. Display Employee's Name and Salary.
+select ename,salary from emp;
+
+7. Display only unique departments(depno) from EMP table.
+select distinct dept_id from dept;
+
+8. Display Employees whose name starts with 'J'.
+select * from emp where ename like 'j%';
+
+9. Display all the employees Date of joining(HireDate) and salary(sal).
+select hire_date,salary from emp;
+
+10. Display all clerks(job) from EMP table.
+select job from emp;
+
+11. Display all employee's name and salary whose salary is more than 2000.
+select ename,salary from emp where salary>2000;
+
+12. Display all employees who are not in department number (deptno) 30.
+select * from dept where not dept_id=30;
+
+13. Display employees with their empno, ename and mgr (i.e manager's no).
+
+
+14. Display managers number, job profile, department number and salary of employees allen,adams,jones and Blake.
+
+
+15. Display only unique salary(sal) from EMP table.
+select distinct salary from emp;
+
+16. Display the location of department number 30.
+select location from dept where dept_id=30;
+
+17. Display the details of the department located in 'new york' city.
+select * from dept where location='new york';
+
+18. Display all the employees according to their names in sorted order.
+select * from emp order by ename;
+
+19. Display all the employees who are not salesman nor the manager.
+select * from emp where not job='salesman' and not job='manager';
+
+20.Display the details of a clerk who is getting salary more than 1000.
+select * from emp where salary>1000;

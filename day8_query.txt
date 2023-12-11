@@ -1,0 +1,201 @@
+select * from APPLICANT;
+
+A_ID  A_NAME     CITY       B_DATE
+----- ---------- ---------- ---------
+A001  Sanket     Ahmedabad  14-JUL-02
+A002  Priya      Surat      21-FEB-01
+A003  Vanita     Mumbai     07-JUL-03
+A004  Amisha     Rishikesh  11-NOV-01
+A005  Krishna    Ahmedabad  07-SEP-01
+
+select * from entrance_test;
+
+ET_I ET_NAME          MAX_SCORE
+---- --------------- ----------
+E001 Programming            100
+E002 Maths                  100
+E003 Web Designing           70
+E004 Web DEvloping           80
+
+
+AID   ETID ETEST_DAT      SCORE
+----- ---- --------- ----------
+A001  E004 15-JUN-22         70
+A002  E002 18-JUN-22         85
+A004  E003 19-JUN-22         90
+A003  E001 20-JUN-22         70
+A002  E004 28-JUN-22         65
+A003  E003 21-JUN-22         87
+A001  E002 21-JUN-22         87
+A002  E001 21-JUN-22         90
+A002  E003 20-JUN-22         82
+A001  E003 15-JUN-22         95
+A001  E001 15-JUN-22         95
+
+Exc(1)
+Display Entrance Test ID (ETID) Wise highest marks scored by any applicant
+
+select etid,max(score) from etest_detail group by etid;
+
+ETID MAX(SCORE)
+---- ----------
+E002         87
+E004         70
+E001         95
+E003         95
+
+Exc (2) Count ETID wise total number of applicants appeared for the test
+
+select ETID,count(AID) from etest_detail group by ETID order by ETID;
+
+ETID COUNT(AID)
+---- ----------
+E001          3
+E002          2
+E003          4
+E004          2
+
+Exc(3) Find the minimum number of applicants in the entrance test.
+
+select min(cnt) from (select ETID,count(AID) cnt from etest_detail group by ETID order by ETID);
+
+ MIN(CNT)
+----------
+         2
+
+Exc(4) Count city wise number of applicants registered
+
+select City,count(A_ID) from applicant group by city;
+
+CITY       COUNT(A_ID)
+---------- -----------
+Ahmedabad            2
+Mumbai               1
+Surat                1
+Rishikesh            1
+
+Exc(5) Display all the entrance test details for which the applicant “Sanket” appeared
+
+select * from etest_detail where Aid = (
+select A_id from applicant where A_name like 'Sanket') order by ETID;
+
+AID   ETID ETEST_DAT      SCORE
+----- ---- --------- ----------
+A001  E001 15-JUN-22         95
+A001  E002 21-JUN-22         87
+A001  E003 15-JUN-22         95
+A001  E004 15-JUN-22         70
+
+(2)
+select * from Distributor;
+
+DNO  DNAME                CITY            PHONE
+---- -------------------- ---------- ----------
+D002 Harry Potter         Hogsward   9417554357
+D003 Ron Weasley          Hogsmeade  4082279747
+D004 Tea Post             LJ Campus  6356660734
+D005 Salim Babu           Sarkhej    9427953649
+D001 Sanket               Ahmedabad  7894586978
+D006 Harsh                Sarkhej    9427953679
+
+ select * from Item;
+
+ITEM ITEM_NAME                                          PRICE WEIGHT
+---- --------------------------------------------- ---------- ----------
+i001 cold cofee                                            20 200gm
+i002 hot coffe                                             40 50ml
+i003 burger                                               100 500gm
+i004 nachos                                               200 100gm
+i005 garlic bread                                         250 150gm
+
+select * from Dist_Item;
+
+D_NO ITEM        QTY DIST_DATE
+---- ---- ---------- ---------
+D001 i001        200 24-NOV-01
+D001 i002        200 25-JUL-01
+D001 i003        200 26-NOV-01
+D001 i004        200 27-NOV-01
+D001 i005        200 28-NOV-01
+D002 i001        200 24-NOV-01
+D002 i002        200 25-JUL-01
+D002 i003        200 26-NOV-01
+D002 i004        200 27-NOV-01
+D002 i005        200 28-NOV-01
+D003 i001        200 24-NOV-01
+
+D_NO ITEM        QTY DIST_DATE
+---- ---- ---------- ---------
+D003 i002        200 25-JUL-01
+D003 i003        200 26-NOV-01
+D003 i004        200 27-NOV-01
+D003 i005        200 28-NOV-01
+D004 i001        200 24-NOV-01
+D004 i002        200 25-JUL-01
+D004 i003        200 26-NOV-01
+D004 i004        200 27-NOV-01
+D004 i005        200 28-NOV-01
+D005 i001        200 24-NOV-01
+D005 i002        200 25-JUL-01
+
+D_NO ITEM        QTY DIST_DATE
+---- ---- ---------- ---------
+D005 i003        200 26-NOV-01
+D005 i004        200 27-NOV-01
+D005 i005        200 28-NOV-01
+
+exc(1) Display all the distributor’s name who supplies Item_No 5 
+
+ select dname from Distributor where DNO IN(
+ select D_no from dist_item where itemno = 'i005');
+
+DNAME
+--------------------
+Harry Potter
+Ron Weasley
+Tea Post
+Salim Babu
+Sanket
+
+Exc(2) Display the item which is distributed maximum time
+
+select ITEM_NAME from item where item_no IN(
+select itemno,sum(qty) from dist_item group by itemno);
+
+Exc(3) Display all the items that are distributed by the distributor “Ron Weasley”
+
+select * from dist_item where D_no = (
+select dno from Distributor where dname like'Ron Weasley');
+
+D_NO ITEM        QTY DIST_DATE
+---- ---- ---------- ---------
+D003 i001        200 24-NOV-01
+D003 i002        200 25-JUL-01
+D003 i003        200 26-NOV-01
+D003 i004        200 27-NOV-01
+D003 i005        200 28-NOV-01
+
+Exc(4) Display the Item_Name and Quantity that are received in month of July in 2021
+
+select D_no,to_char(dist_date,'Mon'), sum(qty) AS QTY from dist_item
+ group by D_no,dist_date having to_char(dist_date,'Mon') like 'Jul';
+
+
+D_NO TO_CHAR(DIST        QTY
+---- ------------ ----------
+D003 Jul                 200
+D002 Jul                 200
+D004 Jul                 200
+D005 Jul                 200
+D001 Jul                 200
+
+Exc(5) Display all the items whose price is less than 1000 and received Qty more then 10
+ 
+ select * from dist_item where itemno IN(
+ select item_no,price from item group by item_no,price having price < 1000) and qty > 10;
+
+
+
+
+
+

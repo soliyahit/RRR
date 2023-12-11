@@ -1,0 +1,223 @@
+(1)
+create table branch(bname varchar(10) primary key,city varchar(10));
+
+insert into branch values('Nikol','Ahmedabad');
+insert into branch values('yogichowk','Surat');
+insert into branch values('Verli','Mumbai');
+insert into branch values('Sarkhej','Ahmedabad');
+insert into branch values('Varachha','surat');
+
+BNAME      CITY
+---------- ----------
+Nikol      Ahmedabad
+yogichowk  Surat
+Verli      Mumbai
+Sarkhej    Ahmedabad
+Varachha   surat
+
+(2)
+create table customer(cust_no varchar(5) primary key,Cname varchar(10),city varchar(10));
+
+insert into customer values('C001','Manav','Ahmedabad');
+insert into customer values('C002','Harry','Surat');
+insert into customer values('C003','Ron','Ahmedabad');
+insert into customer values('C004','Priya','Mumbai');
+insert into customer values('C005','Eva','Mumbai');
+
+
+CUST_ CNAME      CITY
+----- ---------- ----------
+C001  Manav      Ahmedabad
+C002  Harry      Surat
+C003  Ron        Ahmedabad
+C004  Priya      Mumbai
+C005  Eva        Mumbai
+
+
+(3)
+create table deposite(Accno varchar(5) primary key,
+cust_no varchar(5) references customer(cust_no),
+Bname varchar(10) references branch(bname),
+amount number(6),
+Adate date
+);
+
+insert into deposite values('AC01','C001','Nikol',50000,'22-jul-2022');
+insert into deposite values('AC02','C002','Varachha',10000,'21-feb-2022');
+insert into deposite values('AC03','C003','Verli',70000,'21-jan-2022');
+insert into deposite values('AC04','C004','Nikol',25000,'09-feb-2021');
+insert into deposite values('AC05','C005','yogichowk',10000,'15-feb-2021');
+
+ACCNO CUST_ BNAME          AMOUNT ADATE
+----- ----- ---------- ---------- ---------
+AC02  C002  Varachha        10000 21-FEB-22
+AC03  C003  Verli           70000 21-JAN-22
+AC04  C004  Nikol           25000 09-FEB-21
+AC05  C005  yogichowk       10000 15-FEB-21
+
+(4)
+create table borrow(LoanNo varchar(5) primary key,
+cust_no varchar(5) references customer(cust_no),
+Bname varchar(10) references branch(bname),
+amount number(10)
+);
+
+insert into borrow values('L001','C001','Nikol',30000);
+insert into borrow values('L002','C002','Varachha',25000);
+insert into borrow values('L003','C003','Verli',15000);
+
+
+LOANN CUST_ BNAME          AMOUNT
+----- ----- ---------- ----------
+L001  C001  Nikol           30000
+L002  C002  Varachha        25000
+L003  C003  Verli           15000
+
+
+Exc(1)
+Get the details of the customers ‘Ron’.
+
+select Accno,loanno,Cname,deposite1.amount AS D_amount,borrow.amount AS L_amount,city
+from customer join deposite1 
+on
+customer.cust_no = deposite1.cust_no
+join borrow
+on
+customer.cust_no = borrow.cust_no
+where cname like'Ron';
+
+ACCNO LOANN CNAME        D_AMOUNT   L_AMOUNT CITY
+----- ----- ---------- ---------- ---------- ----------
+AC03  L003  Ron             70000      15000 Ahmedabad
+
+Exc(2)  Give name of customer who are borrowers and depositors and having living city Ahmedabad
+
+select Accno,loanno,Cname,deposite1.amount AS D_amount,borrow.amount AS L_amount,city
+from customer join deposite1 
+on
+customer.cust_no = deposite1.cust_no
+join borrow
+on
+customer.cust_no = borrow.cust_no
+where city like'Ahmedabad';
+
+ACCNO LOANN CNAME        D_AMOUNT   L_AMOUNT CITY
+----- ----- ---------- ---------- ---------- ----------
+AC01  L001  Manav           50000      30000 Ahmedabad
+AC03  L003  Ron             70000      15000 Ahmedabad
+
+Exc(3) Give city as their city name of customers having same living branch
+
+select cname,city,bname from customer join deposite1 on
+customer.cust_no = deposite1.cust_no
+where bname like'Nikol';
+
+
+CNAME      CITY       BNAME
+---------- ---------- ----------
+Manav      Ahmedabad  Nikol
+Priya      Mumbai     Nikol
+
+ desc emp1;
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ EMP_NO                                    NOT NULL VARCHAR2(4)
+ FNAME                                              VARCHAR2(20)
+ LNAME                                              VARCHAR2(20)
+ DOB                                                DATE
+ ADD1                                               VARCHAR2(20)
+
+insert into emp1 values('E007','jiyan','Takamora','28-feb-2016','japan');
+
+
+ desc company;
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ COMP_ID                                   NOT NULL VARCHAR2(5)
+ EMP_NO                                    NOT NULL VARCHAR2(4)
+ COMPANY_NAME                                       VARCHAR2(10)
+ SALARY                                             NUMBER(5)
+ DEPARTMENT                                         VARCHAR2(10)
+ DESIGNATION                                        VARCHAR2(15)
+
+ Name                                      Null?    Type
+ ----------------------------------------- -------- ----------------------------
+ CUST_NO                                   NOT NULL VARCHAR2(5)
+ CNAME                                              VARCHAR2(10)
+ CITY                                               VARCHAR2(10)
+
+create table company1
+(comp_id varchar(5), emp_no varchar(4) references emp1(emp_no),company_name varchar(10),D_no varchar(5),
+salary number(5),d_loc varchar(10),Hire_date date,department varchar(10),designation varchar(15),primary key(comp_Id,emp_no));
+
+insert into company1 values('C001','E001','intas','D001',2000,'Ahmedabad','26-jul-2020','Management','Manager');
+insert into company1 values('C002','E002','infosys','D002',90000,'Surat','27-jul-2020','HR','Director');
+insert into company1 values('C003','E003','Wipro','D003',90000,'New York','28-jul-2020','Management','Manager');
+insert into company1 values('C004','E004','Azilen','D004',50000,'Wembaly','29-jul-2020','Finance','Accountant');
+insert into company1 values('C006','E006','Azilen','D004',50000,'Wembaly','02-jul-2020','Finance','Clerk');
+insert into company1 values('C005','E005','Wipro','D005',80000,'Ahmedabad','30-jul-2020','marketing','salesman');
+insert into company1 values('C007','E007','Azilen','D004',50000,'Wembaly','02-jul-2020','Finance','supervisior');
+
+Exc(4) Write a query to display the last name, department number, and department name
+ for all employees 
+
+select fname,lname,d_no,department from emp1 join company1
+on
+emp1.emp_no = company1.emp_no;
+
+FNAME                LNAME                D_NO  DEPARTMENT
+-------------------- -------------------- ----- ----------
+Harry                Potter               D001  Management
+Ron                  Wasly                D002  HR
+Ben                  parker               D003  Management
+Nobita               Nobi                 D004  Finance
+Sizuka               Nobi                 D005  marketing
+
+Exc(5) . Create a unique listing of all jobs that are in department D004. 
+          Include the location of the department in the output
+
+select fname,lname,comp_id,department,designation from emp1 join company1
+on emp1.emp_no = company1.emp_no where d_no like'D004';
+
+FNAME                LNAME                COMP_ DEPARTMENT DESIGNATION
+-------------------- -------------------- ----- ---------- ---------------
+Nobita               Nobi                 C006  Finance    Clerk
+Nobita               Nobi                 C004  Finance    Accountant
+jiyan                Takamora             C007  Finance    supervisior
+
+exc(6) Write a query to display the employee’s name, department number, and department
+ name for all employees who work in NEW YORK
+
+select fname,lname,comp_id,d_no,department,designation,d_loc from emp1 join company1
+on emp1.emp_no = company1.emp_no where d_loc like'New York';
+
+FNAME                LNAME                COMP_ D_NO  DEPARTMENT DESIGNATION     D_LOC
+-------------------- -------------------- ----- ----- ---------- --------------- ----------
+Ben                  parker               C003  D003  Management Manager         New York
+
+Exc(7)Display the employee’s last name and employee number along with their manager’s
+ last name and manager number. Label the columns Employee, Emp#, Manager, and
+ Mgr#, respectively 
+
+dr0p
+
+
+exc(8)Create a query to display the name and hire date of any employee hired after
+ employee ‘Harry’
+
+select emp_no,Hire_date from company1 where hire_date > (select hire_date from company1 where emp_no like'E001');
+
+EMP_ HIRE_DATE
+---- ---------
+E002 27-JUL-20
+E003 28-JUL-20
+E004 29-JUL-20
+E005 30-JUL-20
+
+
+
+
+
+
+
+

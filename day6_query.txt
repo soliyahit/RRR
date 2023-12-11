@@ -1,0 +1,466 @@
+exc(1) create applicant table 
+
+	APPLICANT (AID, A_Name, City, B_Date)
+	ENTRANCE_TEST (ET_ID, ET_Name, Max_Score)
+	ETEST_DETAILS (AID, ETID, ETest_Date, Score)
+
+create table applicant
+  2  (
+  3     A_ID varchar(5) primary key,
+  4     A_name varchar(10),
+  5     city varchar(10),
+  6     B_date date
+  7* )
+
+insert into applicant values ('A001','Sanket','Ahmedabad','14-jul-2002');
+insert into applicant values ('A002','Priya','Surat','21-feb-2001');
+insert into applicant values ('A003','Vanita','Mumbai','07-jul-2003');
+insert into applicant values ('A004','Amisha','Rishikesh','11-nov-2001');
+insert into applicant values ('A005','Krishna','Ahmedabad','07-sep-2000');
+
+A_ID  A_NAME     CITY       B_DATE
+----- ---------- ---------- ---------
+A001  Sanket     Ahmedabad  14-JUL-02
+A002  Priya      Surat      21-FEB-01
+A003  Vanita     Mumbai     07-JUL-03
+A004  Amisha     Rishikesh  11-NOV-01
+A005  Krishna    Ahmedabad  07-SEP-01
+
+
+Create Entrance test table
+
+	create table entrance_test(
+		Et_ID varchar(4) primary key,
+		ET_name varchar(15),
+		max_score number(4)
+);
+
+insert into entrance_test values('E001','Programming',100);
+insert into entrance_test values('E002','Maths',100);
+insert into entrance_test values('E003','Web Designing',70);
+insert into entrance_test values('E004','Web DEvloping',80);
+
+
+ET_I ET_NAME          MAX_SCORE
+---- --------------- ----------
+E001 Programming            100
+E002 Maths                  100
+E003 Web Designing           70
+E004 Web DEvloping           80
+
+
+Create table Etest Details 
+
+	create table Etest_detail23(
+		AID varchar(5) references applicant(A_ID),
+		ETID varchar(4) references entrance_test(ET_ID), 
+		ETEST_date date,
+		score number(5),
+		primary key(AID,ETID)
+);
+
+insert into Etest_detail values('A001','E004','15-jun-2022',70);
+insert into Etest_detail values('A002','E002','18-jun-2022',85);
+insert into Etest_detail values('A004','E003','19-jun-2022',90);
+insert into Etest_detail values('A003','E001','20-jun-2022',70);
+insert into Etest_detail values('A002','E004','28-jun-2022',65);
+insert into Etest_detail values('A003','E003','18-jun-2022',87);
+insert into Etest_detail values('A002','E002','18-jun-2022',87);
+insert into Etest_detail values('A002','E001','21-jun-2022',90);
+insert into Etest_detail values('A001','E003','20-jun-2022',82);
+insert into Etest_detail values('A001','E001','15-jun-2022',95);
+
+
+Table 2:
+	create table Etest_detail23(
+		AID varchar(5) references applicant(A_ID),
+		ETID varchar(4) references entrance_test(ET_ID), 
+		ETEST_date date,
+		score number(5),
+		primary key(AID,ETID)
+);
+
+
+insert into Etest_detail23 values('A001','E001','15-jun-2022',70);
+insert into Etest_detail23 values('A001','E002','16-jun-2022',85);
+insert into Etest_detail23 values('A001','E003','17-jun-2022',90);
+insert into Etest_detail23 values('A001','E004','18-jun-2022',70);
+insert into Etest_detail23 values('A002','E001','15-jun-2022',65);
+insert into Etest_detail23 values('A002','E002','16-jun-2022',87);
+insert into Etest_detail23 values('A002','E003','17-jun-2022',87);
+insert into Etest_detail23 values('A002','E004','18-jun-2022',90);
+insert into Etest_detail23 values('A003','E001','15-jun-2022',82);
+insert into Etest_detail23 values('A003','E002','16-jun-2022',95);
+insert into Etest_detail23 values('A003','E003','17-jun-2022',95);
+insert into Etest_detail23 values('A003','E004','18-jun-2022',95);
+insert into Etest_detail23 values('A004','E001','15-jun-2022',95);
+insert into Etest_detail23 values('A004','E002','16-jun-2022',95);
+insert into Etest_detail23 values('A004','E003','17-jun-2022',95);
+insert into Etest_detail23 values('A004','E004','18-jun-2022',95);
+
+
+AID   ETID ETEST_DAT      SCORE
+----- ---- --------- ----------
+A001  E004 15-JUN-22         70
+A002  E002 18-JUN-22         85
+A004  E003 19-JUN-22         90
+A003  E001 20-JUN-22         70
+
+
+Exc(1) How many applicants have appeared for each test
+
+select AID,count(*) AS Test_No from etest_detail group by AID;
+
+AID      TEST_NO
+----- ----------
+A001           2
+A002           3
+A003           2
+A004           1
+
+Exc(2) Display highest score for each test
+
+select AID,Max(score) AS Highest_Score from etest_detail group by AID;
+
+AID   HIGHEST_SCORE
+----- -------------
+A004             90
+A003             87
+A001             87
+A002             90
+
+Exc(3) Display applicant’s ID who appeared for more than 3 tests
+
+select AID,count(*) AS Test_No from etest_detail group by AID having count(AID) > 3;
+
+AID      TEST_NO
+----- ----------
+A002           4
+
+Exc(4) Calculate applicant’s average score across all test they have appeared in
+
+select ETID,AID,avg(score) AS Average_Score from etest_detail group by AID,ETID;
+
+AID   AVERAGE_SCORE
+----- -------------
+A004             90
+A003           78.5
+A001           78.5
+A002           80.5
+
+Exc(5) Display number of applicants by city
+
+select city,count(City) AS Applicant_no from applicant group by City;
+
+CITY       APPLICANT_NO
+---------- ------------
+Ahmedabad             2
+Mumbai                1
+Surat                 1
+Rishikesh             1
+
+Exc(6) Display ETID and Average score where average score is more than 50
+
+select ETID,avg(Score) AS Average_score from etest_detail group by ETID having avg(score) > 50 order by(ETID) DESC;
+
+ETID AVERAGE_SCORE
+---- -------------
+E001            80
+E002            86
+E003    86.3333333
+E004          67.5
+
+Exc(7) Count date wise total entrance test to be held
+
+select Etest_date,Count(Etest_date) AS Etest_date from Etest_detail23 group by Etest_date;
+
+ETEST_DAT ETEST_DATE
+--------- ----------
+16-JUN-22          4
+17-JUN-22          4
+18-JUN-22          4
+15-JUN-22          4
+
+
+
+
+
+2. Use the following tables and solve below given queries.
+
+Distributor (Dno, DName, City, Phone)
+Item (Item_No, Item_Name, Price, Weight)
+Dist_Item (Dno, Item_No, Qty, Date)
+
+create table Distributor(Dno varchar(4) primary key, Dname varchar(20), city varchar(10), Phone number(10))
+
+insert into distributor values('D001','Sanket','Ahmedabad',7894586978);
+insert into distributor values('D002','Harry Potter','Hogsward',9417554357);
+insert into distributor values('D003','Ron Weasley','Hogsmeade',4082279747);
+insert into distributor values('D004','Tea Post','LJ Campus',6356660734);
+insert into distributor values('D005','Salim Babu','Sarkhej',9427953649);
+insert into distributor values('D006','Harsh','Sarkhej',9427953679);
+
+DNO  DNAME                CITY            PHONE
+---- -------------------- ---------- ----------
+D002 Harry Potter         Hogsward   9417554357
+D003 Ron Weasley          Hogsmeade  4082279747
+D004 Tea Post             LJ Campus  6356660734
+D005 Salim Babu           Sarkhej    9427953649
+D001 Sanket               Ahmedabad  7894586978
+
+Item (Item_No, Item_Name, Price, Weight)
+
+create table item(item_no varchar(4) primary key,item_name varchar(45),price number(5),weight varchar(10));
+
+insert into item values('i001','cold cofee',20,'200gm');
+insert into item values('i002','hot coffe ',40,'50ml');
+
+insert into item values('i003','burger',100,'500gm');
+insert into item values('i004','nachos',200,'100gm');
+
+insert into item values('i005','garlic bread',250,'150gm');
+
+
+
+
+SQL> select * from item;
+
+ITEM ITEM_NAME                                          PRICE WEIGHT
+---- --------------------------------------------- ---------- ----------
+i001 cold cofee                                            20 200gm
+i002 hot coffe                                             40 50ml
+i003 burger                                               100 500gm
+i004 nachos                                               200 100gm
+i005 garlic bread                                         250 150gm
+
+
+
+
+
+Dist_Item (Dno, Item_No, Qty, Date)
+
+create table Dist_Item  (
+		D_NO varchar(4) references Distributor(Dno),
+		ItemNo varchar(4) references item(item_no), 
+		qty number(4),
+		dist_date date,
+		primary key(D_no,ItemNO)	
+);
+
+insert into  Dist_Item 
+values('D001','i001',200,'24-nov-2001');
+insert into  Dist_Item values('D001','i002',200,'25-nov-2001');
+insert into  Dist_Item values('D001','i003',200,'26-nov-2001');
+insert into  Dist_Item values('D001','i004',200,'27-nov-2001');
+insert into  Dist_Item values('D001','i005',200,'28-nov-2001');
+insert into  Dist_Item values('D002','i001',200,'24-nov-2001');
+insert into  Dist_Item values('D002','i002',200,'25-nov-2001');
+insert into  Dist_Item values('D002','i003',200,'26-nov-2001');
+insert into  Dist_Item values('D002','i004',200,'27-nov-2001');
+insert into  Dist_Item values('D002','i005',200,'28-nov-2001');
+insert into  Dist_Item values('D003','i001',200,'24-nov-2001');
+insert into  Dist_Item values('D003','i002',200,'25-nov-2001');
+insert into  Dist_Item values('D003','i003',200,'26-nov-2001');
+insert into  Dist_Item values('D003','i004',200,'27-nov-2001');
+insert into  Dist_Item values('D003','i005',200,'28-nov-2001');
+insert into  Dist_Item values('D004','i001',200,'24-nov-2001');
+insert into  Dist_Item values('D004','i002',200,'25-nov-2001');
+insert into  Dist_Item values('D004','i003',200,'26-nov-2001');
+insert into  Dist_Item values('D004','i004',200,'27-nov-2001');
+insert into  Dist_Item values('D004','i005',200,'28-nov-2001');
+insert into  Dist_Item values('D005','i001',200,'24-nov-2001');
+insert into  Dist_Item values('D005','i002',200,'25-nov-2001');
+insert into  Dist_Item values('D005','i003',200,'26-nov-2001');
+insert into  Dist_Item values('D005','i004',200,'27-nov-2001');
+insert into  Dist_Item values('D005','i005',200,'28-nov-2001');D_NO ITEM        QTY DIST_DATE
+---- ---- ---------- ---------
+D001 i001        200 24-NOV-01
+D001 i002        200 25-NOV-01
+D001 i003        200 26-NOV-01
+D001 i004        200 27-NOV-01
+D001 i005        200 28-NOV-01
+D002 i001        200 24-NOV-01
+D002 i002        200 25-NOV-01
+D002 i003        200 26-NOV-01
+D002 i004        200 27-NOV-01
+D002 i005        200 28-NOV-01
+D003 i001        200 24-NOV-01
+
+D_NO ITEM        QTY DIST_DATE
+---- ---- ---------- ---------
+D003 i002        200 25-NOV-01
+D003 i003        200 26-NOV-01
+D003 i004        200 27-NOV-01
+D003 i005        200 28-NOV-01
+D004 i001        200 24-NOV-01
+D004 i002        200 25-NOV-01
+D004 i003        200 26-NOV-01
+D004 i004        200 27-NOV-01
+D004 i005        200 28-NOV-01
+D005 i001        200 24-NOV-01
+D005 i002        200 25-NOV-01
+
+D_NO ITEM        QTY DIST_DATE
+---- ---- ---------- ---------
+D005 i003        200 26-NOV-01
+D005 i004        200 27-NOV-01
+D005 i005        200 28-NOV-01
+
+
+Exc(1) Display city wise total number of distributors
+
+select city,count(*) AS Distributor_NO from Distributor group by City;
+
+
+CITY       DISTRIBUTOR_NO
+---------- --------------
+Hogsmeade               1
+LJ Campus               1
+Ahmedabad               1
+Sarkhej                 2
+Hogsward                1
+
+Exc(2) List distributors’ no by who distributed more than 50 items in month of July
+
+select 
+
+ select D_no,to_char(dist_date,'Mon'), sum(qty) AS QTY from dist_item
+ group by D_no,dist_date having to_char(dist_date,'Mon') like 'Jul' and sum(qty) > 50 order by(d_no) ASC;
+
+
+D_NO TO_CHAR(DIST        QTY
+---- ------------ ----------
+D001 Jul                 200
+D002 Jul                 200
+D003 Jul                 200
+D004 Jul                 200
+D005 Jul                 200
+
+Exc(3) List Item_No with more than 800 Qty delivered
+
+  select ItemNo,sum(qty) from dist_item group by Itemno,qty having sum(qty) > 800 order by(Itemno) asc;
+
+ITEM   SUM(QTY)
+---- ----------
+i001       1000
+i002       1000
+i003       1000
+i004       1000
+i005       1000
+
+Exc(4) List Dno who delivered more than 50 items for each month
+
+select D_no,to_char(dist_date,'Mon'), sum(qty) AS QTY from dist_item
+ group by D_no,to_char(dist_date,'Mon') having sum(qty) > 50 order by(d_no) ASC;
+
+D_NO TO_CHAR(DIST        QTY
+---- ------------ ----------
+D001 Jul                 200
+D001 Nov                 800
+D002 Jul                 200
+D002 Nov                 800
+D003 Jul                 200
+D003 Nov                 800
+D004 Jul                 200
+D004 Nov                 800
+D005 Jul                 200
+D005 Nov                 800
+
+Exc(5) Display item details in descending order of price and ascending order of weight
+
+	
+select Item_No, Item_Name, Price, Weight from item order by price desc, weight;
+
+
+ITEM ITEM_NAME                                          PRICE WEIGHT
+---- --------------------------------------------- ---------- ----------
+i005 garlic bread                                         250 150gm
+i004 nachos                                               200 100gm
+i003 burger                                               100 500gm
+i002 hot coffe                                             40 50ml
+i001 cold cofee                                            20 200gm
+
+exc(6)  Show all distributors in alphabetical order of City and DName
+
+select * from distributor order by city, dname;
+
+DNO  DNAME                CITY            PHONE
+---- -------------------- ---------- ----------
+D001 Sanket               Ahmedabad  7894586978
+D003 Ron Weasley          Hogsmeade  4082279747
+D002 Harry Potter         Hogsward   9417554357
+D004 Tea Post             LJ Campus  6356660734
+D006 Harsh                Sarkhej    9427953679
+D005 Salim Babu           Sarkhej    9427953649
+
+
+Exc(7) Calculate average quantity of items distributed on each day.
+
+select D_no,avg(qty),to_char(dist_date,'dd/mm/yyyy') from dist_item group by d_no,to_char(dist_date,'dd/mm/yyyy'),qty order by(D_no);
+
+D_NO   AVG(QTY) TO_CHAR(DI
+---- ---------- ----------
+D001        200 24/11/2001
+D001        200 25/07/2001
+D001        200 26/11/2001
+D001        200 27/11/2001
+D001        200 28/11/2001
+D002        200 24/11/2001
+D002        200 25/07/2001
+D002        200 26/11/2001
+D002        200 27/11/2001
+D002        200 28/11/2001
+D003        200 24/11/2001
+
+D_NO   AVG(QTY) TO_CHAR(DI
+---- ---------- ----------
+D003        200 25/07/2001
+D003        200 26/11/2001
+D003        200 27/11/2001
+D003        200 28/11/2001
+D004        200 24/11/2001
+D004        200 25/07/2001
+D004        200 26/11/2001
+D004        200 27/11/2001
+D004        200 28/11/2001
+D005        200 24/11/2001
+D005        200 25/07/2001
+
+D_NO   AVG(QTY) TO_CHAR(DI
+---- ---------- ----------
+D005        200 26/11/2001
+D005        200 27/11/2001
+D005        200 28/11/2001
+
+Exc(8) Find the weight wise average price of items.
+
+ select avg(price) from item where weight = '150gm';
+
+AVG(PRICE)
+----------
+       300
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

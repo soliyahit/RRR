@@ -1,0 +1,148 @@
+1. Write a procedure which will take Faculty ID as an input and will display all the 
+ information of that faculty
+
+create or replace procedure fmaster
+(fno IN f_master.f_no%type)
+IS
+name f_master.fname%type;
+sal f_master.salary%type; 
+Begin
+	select fname,salary into name,sal from f_master where f_no = fno;
+	dbms_output.put_line(name);
+	dbms_output.put_line(sal);
+exception
+	when NO_DATA_FOUND then
+	dbms_output.put_line('Error - Faculty Number Not Found');
+end;
+
+2. Write a stored procedure that uses an INOUT parameter and an IN parameter. The user 
+ will supply 'M' or 'F' through IN parameter (emp_gender) to count a number of male or 
+ female from Employee table. The INOUT parameter (mfgender) will return the result to a 
+ user.
+
+create table emp(eno number(4),ename varchar(10),gender varchar(1),salary number(5),
+	check (gender in('M','F')));
+
+insert into emp values(1,'Manav','M',50000);
+insert into emp values(2,'Sanket','M',70000);
+insert into emp values(3,'Harsh','M',80000);
+insert into emp values(4,'Diya','F',5000);
+insert into emp values(5,'Isha','F',9000);
+insert into emp values(6,'Mayur','M',9000);
+
+create or replace procedure empgen
+(
+ gen IN OUT emp.gender%type
+)
+IS
+begin
+select count(gender) into gen from emp where gender = gen; 
+end;
+
+declare 
+	gn emp.gender%type;
+begin
+	gn := '&gender';
+	empgen(gn);
+	dbms_output.put_line(gn);
+end;
+
+
+3. Write a procedure which will take minimum limit and maximum limit of salary and the
+ execution of the procedure will display name of the employees having salary between the 
+ range.
+
+create or replace procedure psalary
+(fno IN f_master.f_no%type)
+IS
+ name f_master.fname%type;
+ sal f_master.salary%type;
+begin
+	select fName,Salary into name,sal from f_master where f_no = fno;
+	if (sal > 15000 and sal <75000) then
+	dbms_output.put_line(name);
+	dbms_output.put_line(sal);
+	else
+	RAISE NO_DATA_FOUND;
+	end if;
+exception
+	when NO_DATA_FOUND then
+	dbms_output.put_line('Error - DATA NOT FOUND');
+end;
+
+
+create or replace procedure psalary
+(fno IN f_master.f_no%type)
+IS
+ name f_master.fname%type;
+ sal f_master.salary%type;
+begin
+	select fName,Salary into name,sal from f_master where f_no = fno;
+	if (sal > 15000 and sal <75000) then
+	dbms_output.put_line(name);
+	dbms_output.put_line(sal);
+	else
+	RAISE NO_DATA_FOUND;
+	end if;
+exception
+	when NO_DATA_FOUND then
+	dbms_output.put_line('Error - DATA NOT FOUND');
+end;
+
+create or replace procedure psalary
+(fno IN f_master.f_no%type)
+IS
+ name f_master.fname%type;
+ sal f_master.salary%type;
+begin
+	select fName,Salary into name,sal from f_master where f_no = fno;
+	if (sal > 15000 and sal <75000) then
+	dbms_output.put_line(name);
+	dbms_output.put_line(sal);
+	else
+	RAISE NO_DATA_FOUND;
+	end if;
+exception
+	when NO_DATA_FOUND then
+	dbms_output.put_line('Error - DATA NOT FOUND');
+end;
+
+
+(II)
+
+Movie (movie_id, movie_name, date_of_release)
+
+create table movie(movie_id number(10) primary key,movie_name varchar(15),dor date);
+
+insert into movie values(1,'ek_villen','31-jul-2022');
+insert into movie values(2,'rakshabandhan','11-aug-2022');
+insert into movie values(3,'kgf2','27-feb-2022');
+insert into movie values(4,'Sonic','31-july-2022');
+insert into movie values(5,'Nadi_dosh','31-july-2022');
+
+Screen (screen_id, location, max_capacity)
+
+create table screen(s_id number(5) primary key,location varchar(10),m_cap number(5));
+
+insert into screen values(1,'Nikol',200);
+insert into screen values(2,'CTM',100);
+insert into screen values(3,'Raipur',80);
+insert into screen values(4,'Bapunagar',100);
+
+Current (movie_id,screen_id, date_of_arrival, date_of_closure)
+
+create table current1(m_id number(10) references movie(movie_id),s_id number(5) references screen(s_id),doa date,doc date);
+
+insert into current1 values(1,1,'31-jul-2022','7-aug-2022');
+insert into current1 values(1,3,'31-jul-2022','15-aug-2022');
+insert into current1 values(2,4,'11-aug-2022','20-aug-2022');
+insert into current1 values(3,4,'27-feb-2022','3-apr-2022');
+insert into current1 values(5,2,'31-jul-2022','15-aug-2022');
+insert into current1 values(4,1,'31-jul-2022','12-aug-2022');
+insert into current1 values(4,2,'12-aug-2022','30-aug-2022');
+
+
+1. Consider the above table and write a function to return the movie name which arrived today.
+create or replace function fdate
+(mname OUT movie.movie_name%type,
+ 

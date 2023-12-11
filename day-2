@@ -1,0 +1,68 @@
+1. create below given table called "client_master" with the constrains and insert minimum 5 records in it.
+
+Query:
+
+ create table client_master(
+  2  c_no varchar(4) check (c_no like 'c%') primary key,
+  3  client_name varchar(25) not null,
+  4  pincode number(6) not null,
+  5  birth_date date not null,
+  6  occupation varchar(15) not null);
+
+
+2. create following tables with constraints and records as shown in the example below.
+Table: Product_Master
+
+Query:
+
+create table product_master(
+  2  p_no varchar(4) check (p_no like 'p%') primary key,
+  3  description varchar(10) not null,
+  4  profit_per number(1) not null,
+  5  unit varchar(6) not null,
+  6  qty_hand number(3) not null,
+  7  reorder number(2) not null,
+  8  sell_p number(3) not null,
+  9  cost_p number(3) not null);
+
+
+3. Create table and insert minimum 10 records in salesman_master table as shown below.
+
+Query:
+
+ create table salesman_master(
+  2  s_no varchar(4) check(s_no like 's%') primary key,
+  3  name varchar(8) not null,
+  4  add1 varchar(10) null,
+  5  add2 varchar(10) null,
+  6  city varchar(8) not null,
+  7  pincode number(6) null,
+  8  state varchar(12) not null,
+  9  salary number(6) not null,
+ 10  target number(3) not null,
+ 11  sales number(3) not null);
+
+
+4. Create sales_order and sales_order_details table as shown below. insert minimum 10 records in it.
+
+Query-1:
+
+create table sales_order(
+order_no varchar(4) check(order_no like 'O%') primary key,
+client_no varchar(4) references client_master(c_no),
+order_date date,
+salesman_no varchar(4) references salesman_master,
+delivery_type char(1) check (delivery_type in('f','p')),
+bill_paid char(1) check(bill_paid in('y','n')),
+delivery_date date,
+order_status varchar(10) check(order_status in('in process','pending','fulfilled')));
+
+
+Query-2:
+
+create table sales_order_details(
+  2  order_no varchar(4) references sales_order,
+  3  product_no varchar(4) references product_master,
+  4  qty_ordered int,
+  5  qty_dispatched int,
+  6* product_rate int );

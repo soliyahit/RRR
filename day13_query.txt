@@ -1,0 +1,145 @@
+1. Print a static string “Hello Every One…!” using an anonymous PLSQL block and execute 
+ begin
+     dbms_output.put_line('Hello Every One.....');
+ end;
+
+
+Hello Every One.....
+
+
+2.Write a PLSQL block to display a greeting message like: “Hi!! Today is 3rd November 2021, Friday
+declare
+	day1 varchar(10);
+begin
+	dbms_output.put('Hi!! Today is ' || sysdate());
+	day1 := to_char(sysdate(),'day');
+	dbms_output.put_line(', ' || day1);
+end;
+
+Hi!! Today is 05-AUG-22, friday
+
+3. Declare a string variable to store student’s name, define three integer variables to store marks of 3 subjects (out of 50) of that student. 
+   Write a PLSQL code to calculate total of all three subjects and print the result in percentage.
+
+declare
+	Sname varchar(10);
+	Mark1 number;
+	Mark2 number;
+	Mark3 number;
+	addition number;
+	percentage number(4,2);
+begin
+	Sname := '&Name';
+	dbms_output.put_line('The name is ' || Sname);
+	Mark1 := &Mark;
+	Mark2 := &Mark;
+	Mark3 := &Mark;
+	dbms_output.put_line('The Mark1 is ' || Mark1);
+	dbms_output.put_line('The Mark2 is ' || Mark2);
+	dbms_output.put_line('The Mark3 is ' || Mark3);
+	addition := Mark1 + Mark2 + Mark3;
+	dbms_output.put_line('The sum is ' || addition);
+	percentage := addition/150*100;
+	dbms_output.put_line('The Percentage is ' || percentage);
+end;
+
+4. Write a program to divide 2 numbers and if the denominator if 0 then handle the exception
+declare
+	no1 number;
+	no2 number;
+	answer number;
+begin 
+	no1 := &noA;
+	no2 := &noB;
+	dbms_output.put_line('The NO1 is ' || no1);
+        dbms_output.put_line('The NO2 is ' || no2);
+	if no2!=0 then
+	answer := no1/no2;
+	dbms_output.put_line('The Division is ' || answer);
+	else
+	dbms_output.put_line('The division is not possible');
+	end if;
+end;
+
+-------------------------------------------------------------------------------------
+declare
+	no1 number;
+	no2 number;
+	answer number;
+	no_divide_zero exception;
+begin
+	no1 := &noA;
+	no2 := &noB;
+	dbms_output.put_line('The NO1 is ' || no1);
+        dbms_output.put_line('The NO2 is ' || no2);
+	if no2!=0 then
+	answer := no1/no2;
+	dbms_output.put_line('The Division is ' || answer);
+	elsif no2=0 then
+	RAISE no_divide_zero;
+	end if;
+exception
+	when no_divide_zero then
+	dbms_output.put_line('please input valid denominator');
+end;
+
+5. Write a user defined exception for above program 3 where if marks are less than 0 then
+   appropriate error message must be shown as exception.
+
+declare
+	Sname varchar(10);
+	Mark1 number;
+	Mark2 number;
+	Mark3 number;
+	addition number;
+	percentage number(4,2);
+	no_marks Exception;
+begin
+	Sname := '&Name';
+	dbms_output.put_line('The name is ' || Sname);
+	Mark1 := &Mark;
+	Mark2 := &Mark;
+	Mark3 := &Mark;
+	dbms_output.put_line('The Mark1 is ' || Mark1);
+	dbms_output.put_line('The Mark2 is ' || Mark2);
+	dbms_output.put_line('The Mark3 is ' || Mark3);
+	if Mark1!=0 and Mark2!=0 and Mark3!=0 then
+	addition := Mark1 + Mark2 + Mark3;
+	dbms_output.put_line('The sum is ' || addition);
+	percentage := addition/150*100;
+	dbms_output.put_line('The Percentage is ' || percentage);
+	else
+	RAISE no_marks;
+	end if;
+Exception 
+	when no_marks then
+	dbms_output.put_line('please enter valid marks');
+	
+end;
+
+
+
+6. Write a PLSQL block to find the largest of three numbers
+
+declare
+	A number;
+	B number;
+	C number;
+begin
+	A := &noa;
+	B := &nob;
+	C := &noc;
+	if A > B and A > C then
+	dbms_output.put_line('A is the largest Number ' || A);
+	elsif B > A and B > C then
+	dbms_output.put_line('B is the largest Number ' || B);
+	else
+	dbms_output.put_line('C is the largest Number ' || C);
+	end if;
+end;
+	
+	
+	
+
+
+	
